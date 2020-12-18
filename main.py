@@ -3,7 +3,9 @@ data = json.load(open("data.json"))
 
 
 def translate(word):
-    return data[word]
+    if word in data:
+        return data[word]
+    return "Couldn't find the word. Please doble check it"
 
 
 def main():
