@@ -10,7 +10,7 @@ def translate(word):
 
 def main():
     word = input("Enter a word: ")
-    print(translate(word))
+    print(translate(word.lower()))
 
 
 
