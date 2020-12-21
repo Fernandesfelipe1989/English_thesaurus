@@ -11,13 +11,16 @@ con = mysql.connector.connect(
 
 def translate(word):
     cursor = con.cursor()
-    query = cursor.execute("SELECT * FROM Dictionary WHERE Expression = '%s'" % word)
+    query = cursor.execute("SELECT * FROM Dictionary WHERE Expression = %s", [str(word)])
     results = cursor.fetchall()
     if results:
         return results
 
     else:
-        query = cursor.execute(f"SELECT Expression FROM Dictionary WHERE Expression LIKE 'rain%'")
+        wrong_word = word
+        if len(word) > 4:
+            wrong_word = word[:3]
+        query = cursor.execute("SELECT Expression FROM Dictionary WHERE Expression LIKE '%s%%'" % wrong_word)
         results = cursor.fetchall()
         match_list = []
         for i in results:
@@ -28,7 +31,7 @@ def translate(word):
             if yn.lower() == "yes" or yn.lower() == "y":
                 query = cursor.execute("SELECT * FROM Dictionary WHERE Expression = '%s'" % word_match[0])
                 return cursor.fetchall()
-    return "No way"
+    return "Couldn't find the word. Please doble check it"
 
 
 def main():
